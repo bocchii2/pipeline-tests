@@ -1,44 +1,35 @@
+/* groovylint-disable-next-line CompileStatic */
 pipeline {
   agent any
   options {
     timestamps()
     skipDefaultCheckout()
   }
-  
-  stage("Checkout") {
-    steps {
-      checkout scm
-    }
-  }
-  stage("Build") {
-    steps {
-      sh "echo 'Building the application...'"
-      // Aquí puedes agregar comandos para construir tu aplicación, por ejemplo:
-      // sh 'mvn clean install' o sh 'npm install && npm run build'
-    }
-  }
 
-  stage("Test") {
-    steps {
-      sh "echo 'Running tests...'"
-      // Aquí puedes agregar comandos para ejecutar tus pruebas, por ejemplo:
-      // sh 'mvn test' o sh 'npm test'
-    }
-  }
+  stages {
+      stage('Build') {
+          steps {
+            echo 'Building...'
+          }
+      }
 
-  stage("Deploy") {
-    steps {
-      sh "echo 'Deploying the application...'"
-      // Aquí puedes agregar comandos para desplegar tu aplicación, por ejemplo:
-      // sh 'docker-compose -f docker/docker-compose.yaml up -d'
-    }
+      stage('Test') {
+          steps {
+            echo 'Testing...'
+          }
+      }
+      stage('Deploy') {
+          steps {
+            echo 'Deploying...'
+          }
+      }
   }
-
   post {
-    always {
-      sh "echo 'Cleaning up...'"
-      // Aquí puedes agregar comandos para limpiar recursos, por ejemplo:
-      // sh 'docker-compose -f docker/docker-compose.yaml down'
-    }
+      always {
+          echo 'This will always run'
+      }
+      success {
+          echo 'This will run only if successful'
+      }
   }
 }
